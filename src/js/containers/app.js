@@ -12,7 +12,7 @@ import Nav from '../views/nav'
 
 class App extends Component {
   componentWillReceiveProps (nextProps) {
-    const {errorMessage} = this.props
+    const {errorMessage} = this.props 
 
     if (nextProps.errorMessage && errorMessage !== nextProps.errorMessage) {
       toastr.error(nextProps.errorMessage, {
