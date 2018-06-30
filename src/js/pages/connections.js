@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ConnectionList from '../views/connection-list'
-import Globe from '../views/globe'
+//import Globe from '../views/globe'
 import { lookupPretty as getLocation } from 'ipfs-geoip'
 import i18n from '../utils/i18n.js'
 import { Row, Col } from 'react-bootstrap'
@@ -10,6 +10,7 @@ import {withIpfs} from '../components/ipfs'
 class Connections extends React.Component {
   constructor (props) {
     super(props)
+    //<!--<Globe peers={this.state.peers} />/>
     this.state = {
       peers: [],
       locations: {},
@@ -19,7 +20,7 @@ class Connections extends React.Component {
 
   componentDidMount () {
     this.mounted = true
-    this.pollInterval = setInterval(() => this.getPeers(), 1000)
+    this.pollInterval = setInterval(() => this.getPeers(), 3000)
     this.getPeers()
   }
 
@@ -31,6 +32,7 @@ class Connections extends React.Component {
   getPeers () {
     this.props.ipfs.swarm.peers((err, peers) => {
       if (err) {
+        console.log("errorororor")
         return console.error(err)
       }
       // If we've unmounted, abort
@@ -41,6 +43,7 @@ class Connections extends React.Component {
       peers = peers.sort((a, b) => {
         return a.peer.toB58String() > b.peer.toB58String() ? 1 : -1
       })
+      console.log(peers)
 
       peers.forEach((peer, i) => {
         peer.ipfs = this.props.ipfs
@@ -49,27 +52,35 @@ class Connections extends React.Component {
         }
 
         let id = peer.peer.toB58String()
-        let location = this.state.locations[id]
-        if (!location) {
-          this.state.locations[id] = {}
-          const addr = peer.addr.toString()
-          getLocation(this.props.ipfs, [addr], (err, res) => {
-            if (err) return console.error(err)
-            // If we've unmounted, abort
-            if (!this.mounted) return
+        //let location = this.state.locations[id]
+        //if (!location) {
+        //console.log("getting location")
+        this.state.locations[id] = {}
+        const addr = peer.addr.toString()
+        //getLocation(this.props.ipfs, [addr], (err, res) => {
+          //if (err) {
+            //return 
+            //console.error(err)
+          //} 
 
-            res = res || {}
-            peer.location = res
-            let locations = this.state.locations
-            locations[id] = res
-            peers[i] = peer
-            this.setState({
-              peers,
-              locations,
-              nonce: this.state.nonce++
-            })
-          })
-        }
+        // If we've unmounted, abort
+        if (!this.mounted) {
+          console.log("unmounted")
+          return
+        } 
+        //res = res || {}
+        peer.location = {}//res
+        let locations = this.state.locations
+        locations[id] = {}
+        peers[i] = peer
+        console.log("setting state")
+        this.setState({
+          peers,
+          locations,
+          nonce: this.state.nonce++
+        })
+          //})
+        //}
       })
     })
   }
@@ -77,8 +88,8 @@ class Connections extends React.Component {
   render () {
     return (
       <Row>
-        <Col sm={6} className='globe-column'>
-          <Globe peers={this.state.peers} />
+        <Col sm={1} className='globe-column'>
+         
         </Col>
         <Col sm={6}>
           <h4>{i18n.t('Connected to X peer', { postProcess: 'sprintf', sprintf: [this.state.peers.length], count: this.state.peers.length })}</h4>
@@ -90,6 +101,7 @@ class Connections extends React.Component {
     )
   }
 }
+
 
 Connections.displayName = 'Connections'
 Connections.propTypes = {
