@@ -38,7 +38,10 @@ class Home extends Component {
         }
       })
       getLocation(this.props.ipfs, peer.addresses, (err, location) => {
-        if (err || !location) return console.error(err)
+        if (err || !location) {
+          console.log("couldn't get location")
+          return console.error(err)
+        } 
         if (!this.mounted) return
         this.setState({
           node: {
