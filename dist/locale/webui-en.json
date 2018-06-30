@@ -66,7 +66,7 @@
     "Clear": "Clear",
     "Tail": "Tail",
     "Event Log": "Event Log",
-    "404 - Not Found": "404 - Not Found",
+    "404 - Not Found": "try localhost:[ 5001 | 3000 ]",
     "Go to console home": "Go to console home",
     "Error": "Error",
     "Enter hash or path": "Enter hash or path",
