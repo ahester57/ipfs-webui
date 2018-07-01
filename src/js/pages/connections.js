@@ -69,7 +69,7 @@ class Connections extends React.Component {
           return
         } 
         //res = res || {}
-        peer.location = {}//res
+
         let locations = this.state.locations
         locations[id] = {}
         peers[i] = peer
