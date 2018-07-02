@@ -33,7 +33,7 @@ class App extends Component {
     return (
       <div>
         <ReduxToastr
-          timeOut={5000}
+          timeOut={5001}
           newestOnTop={false}
           position='top-right' />
         <div className='bs-navbar'>

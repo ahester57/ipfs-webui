@@ -30,6 +30,8 @@ class Connections extends React.Component {
   }
 
   getPeers () {
+        clearInterval(this.pollInterval)
+
     this.props.ipfs.swarm.peers((err, peers) => {
       if (err) {
         console.log("errorororor")
@@ -52,17 +54,23 @@ class Connections extends React.Component {
         }
 
         let id = peer.peer.toB58String()
-        //let location = this.state.locations[id]
+        let location = this.state.locations[id]
         //if (!location) {
         //console.log("getting location")
         this.state.locations[id] = {}
         const addr = peer.addr.toString()
-        //getLocation(this.props.ipfs, [addr], (err, res) => {
-          //if (err) {
-            //return 
-            //console.error(err)
-          //} 
+        console.log("conn", addr)
 
+        const addrs = peer.addresses
+        getLocation(this.props.ipfs, [addr], (err, res) => {
+          if (err) {
+            //return 
+            console.error(err)
+          } else {
+            console.log(res)
+            location = {res}
+          }
+        })
         // If we've unmounted, abort
         if (!this.mounted) {
           console.log("unmounted")
@@ -71,7 +79,9 @@ class Connections extends React.Component {
         //res = res || {}
 
         let locations = this.state.locations
-        locations[id] = {}
+        locations[id] = {location}
+        peer.location = {location}
+        console.log(location)
         peers[i] = peer
         console.log("setting state")
         this.setState({
@@ -79,8 +89,6 @@ class Connections extends React.Component {
           locations,
           nonce: this.state.nonce++
         })
-          //})
-        //}
       })
     })
   }
@@ -88,10 +96,7 @@ class Connections extends React.Component {
   render () {
     return (
       <Row>
-        <Col sm={1} className='globe-column'>
-         
-        </Col>
-        <Col sm={6}>
+        <Col sm={10} smOffset={1}>
           <h4>{i18n.t('Connected to X peer', { postProcess: 'sprintf', sprintf: [this.state.peers.length], count: this.state.peers.length })}</h4>
           <div>
             <ConnectionList peers={this.state.peers} />

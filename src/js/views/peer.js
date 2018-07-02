@@ -15,7 +15,7 @@ class Peer extends Component {
             <strong>{i18n.t('Location')} </strong> {this.props.peer.location || i18n.t('Unknown')}
           </p>
           <p>
-            <strong>{i18n.t('Agent Version')} </strong> <code>{this.props.peer.agentVersion || ''}</code>
+            <strong>{i18n.t('Client Version')} </strong> <code>{this.props.peer.agentVersion || ''}</code>
           </p>
           <p>
             <strong>{i18n.t('Protocol Version')} </strong> <code>{this.props.peer.protocolVersion || ''}</code>
